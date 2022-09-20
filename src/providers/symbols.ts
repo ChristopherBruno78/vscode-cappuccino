@@ -12,17 +12,19 @@ export class ObjjDocumentSymbolProvider implements vscode.DocumentSymbolProvider
 
             if (word.startsWith('@')) {
                 let name = rawText.split(' ')[1].replace(/^"(.*)?(.j)"$/, '$1');
-
                 if (word == '@implementation') {
                     symbols.push( this.makeSymbol(name, vscode.SymbolKind.Class, line) );
-                } else if (word == '@import') {
-                    symbols.push( this.makeSymbol(name, vscode.SymbolKind.Package, line) );
                 }
             } else if (word.startsWith('+') || word.startsWith('-')) {
                 let matches = rawText.match(/^[-+]\s*\(\w+\)\s*(\w+)/)
                 if (matches) {
                     symbols.push( this.makeSymbol(matches[1], vscode.SymbolKind.Method, line) );
                 }
+            }
+            else if(word.startsWith('#')) {
+              if (word == '#import') {
+                    symbols.push( this.makeSymbol(name, vscode.SymbolKind.Package, line) );
+                }   
             }
         }
 
